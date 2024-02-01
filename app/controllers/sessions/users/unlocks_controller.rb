@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User::UnlocksController < Devise::UnlocksController
+class Users::UnlocksController < Devise::UnlocksController
   prepend_before_action :require_no_authentication
 
 

@@ -1,4 +1,4 @@
-class User::RegistrationsController < DeviseController
+class Users::RegistrationsController < DeviseController
   prepend_before_action :require_no_authentication
 
   # GET /resource/unlock/new
