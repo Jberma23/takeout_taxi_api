@@ -26,7 +26,7 @@ Rails.application.routes.draw do
     sessions:       "users/sessions",
     passwords:      "users/passwords",
   }, :path_names => {:sign_in => "login", :sign_out => "logout"}
-  get 'welcome_page/welcome'
+  # get 'welcome_page/welcome'
   root 'welcome_page#welcome'
   get '/updates', to: 'updates#index'
   post '/updates', to: 'updates#create'
