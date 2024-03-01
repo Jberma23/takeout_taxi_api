@@ -17,7 +17,6 @@ gem 'geocoder', '~> 1.8', '>= 1.8.2'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
-gem 'devise', '~> 4.9', '>= 4.9.3'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
@@ -33,6 +32,18 @@ gem "jbuilder"
 
 # Use Redis adapter to run Action Cable in production
 gem "redis", ">= 4.0.1"
+
+gem 'active_model_serializers'
+
+
+gem 'rack-cors'
+
+gem 'devise'
+
+gem 'devise-jwt'
+
+# gem 'jsonapi-serializer'
+
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"

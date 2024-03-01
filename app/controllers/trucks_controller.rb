@@ -16,8 +16,7 @@ class TrucksController < ApplicationController
         # include: [:favorites, :ratings, :reviews])
         # else
             trucks = Truck.all.first(10)
-            render json: trucks.to_json( 
-            include: [:favorites, :ratings, :reviews])
+            render json: trucks
         # end
     end
     def show 

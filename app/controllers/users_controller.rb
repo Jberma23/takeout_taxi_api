@@ -1,27 +1,30 @@
 
 class UsersController < ApplicationController
-    before_action :authenticate
+    # before_action :authenticate_user!
     def index 
-        if current_user != nil   
-            render json:  current_user.to_json( 
-                include: [:ratings, :orders, :reviews, :favorites ])
+        @users = User.all
+        render json: @users
+        # if current_user != nil   
+        #     render json:  current_user.to_json( 
+        #         include: [:ratings, :orders, :reviews, :favorites ])
             
-        else 
-            render json:  User.all.to_json( 
-                include: [:ratings, :orders, :reviews, :favorites ])
-        end
+        # else 
+        #     render json:  User.all.to_json( 
+        #         include: [:ratings, :orders, :reviews, :favorites ])
+        # end
     end
    
     def show 
-  
-        jwt = request.headers[:token]
-        if jwt
-        id = decode(jwt)
-        current_user = User.find_by(id: id['user_id']) 
-        render json: current_user.to_json(status: :accepted,  include: [:ratings, :orders, :reviews, :favorites ])
-        else 
-            render json: User.all.to_json(status: :accepted,  include: [:ratings, :orders, :reviews, :favorites ])
-        end
+        @user = User.find_by(id: params[:id])
+        render json: @user
+        # jwt = request.headers[:token]
+        # if jwt
+        # id = decode(jwt)
+        # current_user = User.find_by(id: id['user_id']) 
+        # render json: current_user.to_json(status: :accepted,  include: [:ratings, :orders, :reviews, :favorites ])
+        # else 
+        #     render json: User.all.to_json(status: :accepted,  include: [:ratings, :orders, :reviews, :favorites ])
+        # end
     end
     def new 
         @user = User.new
@@ -51,6 +54,6 @@ class UsersController < ApplicationController
 
     private
     def user_params
-        params.require(:user).permit(:firstName, :lastName, :role, :email, :username, :password )
+        params.require(:user).permit(:first_name, :last_name, :role, :email, :username, :password )
     end
 end

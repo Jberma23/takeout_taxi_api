@@ -45,8 +45,8 @@ require 'geocoder'
 15.times do 
 
 User.create(
-firstName: Faker::Name.unique.first_name,   
-lastName: Faker::Name.unique.last_name, 
+first_name: Faker::Name.unique.first_name,   
+last_name: Faker::Name.unique.last_name, 
 username: Faker::Internet.username(specifier: @firstName),
 role: Faker::Number.within(range: 0..1),
 email: Faker::Internet.email(name: @firstName),
@@ -54,16 +54,16 @@ password: Faker::Internet.password(min_length: 10, max_length: 20, mix_case: tru
 )
 end
 @JesseCustomer = User.create(
-    firstName: "Jesse",   
-    lastName: "Berman", 
+    first_name: "Jesse",   
+    last_name: "Berman", 
     username: "Jberma23",
     role: 0,
     email: "Jesse.ben.berman@gmail.com",
     password: "Richardmont2011!"
     )
 @JESSEOWNER = User.create(
-    firstName: "Jesse",   
-    lastName: "Berman", 
+    first_name: "Jesse",   
+    last_name: "Berman", 
     username: "Jberma23",
     role: 1,
     email: "Bermankid25101@gmail.com",
@@ -126,7 +126,7 @@ STATES = ["WestVirginia", "Minnesota", "Tennessee", "Maryland", "Connecticut", "
 30.times do 
     Truck.create(
     name: Faker::Company.name,
-    owner_id: User.all.sample.id, 
+    user_id: User.all.sample.id, 
     image_url: Faker::Company.logo, 
     url: Faker::Internet.url, 
     review_count: Faker::Number.between(from: 1, to: 100),
@@ -148,85 +148,81 @@ end
 10.times do 
     # @JesseCustomer = User.find_by(id: 21)
     Favorite.create(
-        favoriter_id: @JesseCustomer.id,
-        favorited_id: Truck.all.sample.id)
+        user_id: @JesseCustomer.id,
+        truck_id: Truck.all.sample.id)
     Rating.create(
-        rater_id: @JesseCustomer.id,
-        rated_id: Truck.all.sample.id,
+        user_id: @JesseCustomer.id,
+        truck_id: Truck.all.sample.id,
         score: Faker::Number.within(range: 0..6)
     )
-    Order.create(
-        purchaser_id: @JesseCustomer.id,
-        seller_id: Truck.all.sample.id)
     Review.create(
-        reviewer_id: @JesseCustomer.id,
-        reviewed_id: Truck.all.sample.id,
-        content: Faker::Lorem.sentence, 
-        username: Truck.all.sample.id)
+        user_id: @JesseCustomer.id,
+        truck_id: Truck.all.sample.id,
+        content: Faker::Lorem.sentence)
 end    
 
 
 10.times do 
 Favorite.create(
-    favoriter_id: User.all.sample.id,
-    favorited_id: Truck.all.sample.id)
+    user_id: User.all.sample.id,
+    truck_id: Truck.all.sample.id)
 end    
 
 10.times do 
     Rating.create(
-        rater_id: User.all.sample.id,
-        rated_id: Truck.all.sample.id,
+        user_id: User.all.sample.id,
+        truck_id: Truck.all.sample.id,
         score: Faker::Number.within(range: 0..6))
 end    
-10.times do 
-    Order.create(
-        purchaser_id: User.all.sample.id,
-        seller_id: Truck.all.sample.id)
-end   
+
 10.times do 
     Review.create(
-        reviewer_id: User.all.sample.id,
-        reviewed_id: Truck.all.sample.id,
-        content: Faker::Lorem.sentence,
-        username: User.all.sample.username)
+        user_id: User.all.sample.id,
+        truck_id: Truck.all.sample.id,
+        content: Faker::Lorem.sentence)
 end  
-10.times do 
-    Update.create(
-        content: "#{User.all.sample.username} just favored #{Truck.all.sample.name}")
-end  
-10.times do 
-    Update.create(
-        content: "#{Truck.all.sample.name} just updated it's location")
-end  
-10.times do 
-    Update.create(
-        content: "#{User.all.sample.username} just rated #{Truck.all.sample.name}")
-end  
-10.times do 
-    Update.create(
-        content: "#{User.all.sample.username} just reviewed #{Truck.all.sample.name}")
-end  
+# 10.times do 
+#     Update.create(
+#         content: "#{User.all.sample.username} just favored #{Truck.all.sample.name}")
+# end  
+# 10.times do 
+#     Update.create(
+#         content: "#{Truck.all.sample.name} just updated it's location")
+# end  
+# 10.times do 
+#     Update.create(
+#         content: "#{User.all.sample.username} just rated #{Truck.all.sample.name}")
+# end  
+# 10.times do 
+#     Update.create(
+#         content: "#{User.all.sample.username} just reviewed #{Truck.all.sample.name}")
+# end  
 
 
-Menu.create!(name: Faker::Restaurant.type, truck_id: Truck.all.sample.id)
-Menu.create!(name: Faker::Restaurant.type, truck_id: Truck.all.sample.id)
+# Menu.create!(name: Faker::Restaurant.type, truck_id: Truck.all.sample.id)
+# Menu.create!(name: Faker::Restaurant.type, truck_id: Truck.all.sample.id)
 
-Category.create!(name: Faker::Restaurant.type, menu_id: Menu.all.sample.id)
-Category.create!(name: Faker::Restaurant.type, menu_id: Menu.all.sample.id)
+# Category.create!(name: Faker::Restaurant.type, menu_id: Menu.all.sample.id)
+# Category.create!(name: Faker::Restaurant.type, menu_id: Menu.all.sample.id)
 
-Item.create!(name: Faker::Food.dish, description: Faker::Food.description, ingredients: "#{Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient + Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient}", price: Faker::Number.between(from: 1, to: 15), category_id: Category.all.sample.id)
-Item.create!(name: Faker::Food.dish, description: Faker::Food.description,ingredients: "#{Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient + Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient}", price: Faker::Number.between(from: 1, to: 15), category_id: Category.all.sample.id)
-Item.create!(name: Faker::Food.dish, description: Faker::Food.description,ingredients: "#{Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient + Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient}", price: Faker::Number.between(from: 1, to: 15), category_id: Category.all.sample.id)
-Item.create!(name: Faker::Food.dish, description: Faker::Food.description,ingredients: "#{Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient + Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient}", price: Faker::Number.between(from: 1, to: 15), category_id: Category.all.sample.id)
-Item.create!(name: Faker::Food.dish, description: Faker::Food.description,ingredients: "#{Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient + Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient}", price: Faker::Number.between(from: 1, to: 15), category_id: Category.all.sample.id)
-Item.create!(name: Faker::Food.dish, description: Faker::Food.description,ingredients: "#{Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient + Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient}", price: Faker::Number.between(from: 1, to: 15), category_id: Category.all.sample.id)
+# Item.create!(name: Faker::Food.dish, description: Faker::Food.description, ingredients: "#{Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient + Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient}", price: Faker::Number.between(from: 1, to: 15), category_id: Category.all.sample.id)
+# Item.create!(name: Faker::Food.dish, description: Faker::Food.description,ingredients: "#{Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient + Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient}", price: Faker::Number.between(from: 1, to: 15), category_id: Category.all.sample.id)
+# Item.create!(name: Faker::Food.dish, description: Faker::Food.description,ingredients: "#{Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient + Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient}", price: Faker::Number.between(from: 1, to: 15), category_id: Category.all.sample.id)
+# Item.create!(name: Faker::Food.dish, description: Faker::Food.description,ingredients: "#{Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient + Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient}", price: Faker::Number.between(from: 1, to: 15), category_id: Category.all.sample.id)
+# Item.create!(name: Faker::Food.dish, description: Faker::Food.description,ingredients: "#{Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient + Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient}", price: Faker::Number.between(from: 1, to: 15), category_id: Category.all.sample.id)
+# Item.create!(name: Faker::Food.dish, description: Faker::Food.description,ingredients: "#{Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient + Faker::Food.ingredient + ", " + Faker::Food.ingredient + ", " + Faker::Food.ingredient}", price: Faker::Number.between(from: 1, to: 15), category_id: Category.all.sample.id)
 
 
-Order.create!(seller_id: Truck.all.sample.id, purchaser_id: User.all.sample.id)
-Order.create!(seller_id: Truck.all.sample.id, purchaser_id: User.all.sample.id)
-Order.create!(seller_id: Truck.all.sample.id, purchaser_id: User.all.sample.id)
-Order.create!(seller_id: Truck.all.sample.id, purchaser_id: User.all.sample.id)
-Order.create!(seller_id: Truck.all.sample.id, purchaser_id: User.all.sample.id)
+# Order.create!(seller_id: Truck.all.sample.id, purchaser_id: User.all.sample.id)
+# Order.create!(seller_id: Truck.all.sample.id, purchaser_id: User.all.sample.id)
+# Order.create!(seller_id: Truck.all.sample.id, purchaser_id: User.all.sample.id)
+# Order.create!(seller_id: Truck.all.sample.id, purchaser_id: User.all.sample.id)
+# Order.create!(seller_id: Truck.all.sample.id, purchaser_id: User.all.sample.id)
 # OrderItem.create!(order_id: , item_id: )
 # OrderItem.create!(order_id: , item_id: )
 
+# 10.times do 
+#     Order.create(
+#         user_id: User.all.sample.id,
+#         truck_id: Truck.all.sample.id)
+# end   

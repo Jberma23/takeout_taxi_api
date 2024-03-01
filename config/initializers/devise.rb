@@ -14,12 +14,12 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = 'dc38ed6ae21cfdf46cece23faa1c823eb41591b34ccd6dd59c561d96e690f5c9cfbb4b1060fb5fa586d9cbce9e2f74dd5e117b41ad566b1f532ab0d1149073dd'
+  # config.secret_key = 'bdfcc6969f993e96569ab3af189ce9d8ea280af829496bbfbdf79867ac8a9120c52d01077ca6410be67f7df6e1f90b6d0395b533a6bcf424426d35eb7a6e3ed0'
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
   # config.parent_controller = 'DeviseController'
-
+  config.navigational_formats = []
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
@@ -126,7 +126,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 12
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = '82a1d9e1da9d945ba63f6f9e38478883f7f9c0fdbcc299a3355380b8d8efff9dad877521b85a9a885328100889438feeeb54677df070fddb35b7123618fa9b5f'
+  # config.pepper = 'da0227382c4661ff77092034b9a44a2daea519820391389916f45bf8b775b04e22f707ff3729ce11d8b2f86c3ed88bf6d07c29d1b533c2e4353b79cb32839657'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -304,7 +304,16 @@ Devise.setup do |config|
   # Note: These might become the new default in future versions of Devise.
   config.responder.error_status = :unprocessable_entity
   config.responder.redirect_status = :see_other
-
+  config.jwt do |jwt|
+    jwt.secret = Rails.application.credentials.devise_jwt_secret_key!
+    jwt.dispatch_requests = [
+      ['POST', %r{^/login$}]
+    ]
+    jwt.revocation_requests = [
+      ['DELETE', %r{^/logout$}]
+    ]
+    jwt.expiration_time = 30.minutes.to_i
+end
   # ==> Configuration for :registerable
 
   # When set to false, does not sign a user in automatically after their password is

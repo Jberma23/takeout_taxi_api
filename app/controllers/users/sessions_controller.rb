@@ -1,47 +1,33 @@
 # frozen_string_literal: true
+
 class Users::SessionsController < Devise::SessionsController
-  
-  before_action :configure_sign_in_params, only: [:new, :create]
-
-  # GET /resource/sign_in
-  def new
-    super
+  include RackSessionsFix
+  respond_to :json
+  private
+  def respond_with(current_user, _opts = {})
+    render json: {
+      status: { 
+        code: 200, message: 'Logged in successfully.',
+        data: { user: UserSerializer.new(current_user).serializable_hash[:data][:attributes] }
+      }
+    }, status: :ok
   end
-
-  # POST /resource/sign_in
-  def create
-    if request[:user]["token"]
-      id = decode(request[:user]["token"])
-      @user = User.find_by(id: id['user_id'])
-    else 
-      if User.valid_login?(request[:user]["email"], request[:user]["password"])[0]
-        @user = User.valid_login?(request[:user]["email"], request[:user]["password"])[1]
-      end
-      
-    set_flash_message!(:notice, :signed_in)
-    sign_in(resource_name, resource)
-    yield resource if block_given?
+  def respond_to_on_destroy
+    if request.headers['Authorization'].present?
+      jwt_payload = JWT.decode(request.headers['Authorization'].split(' ').last, Rails.application.credentials.devise_jwt_secret_key!).first
+      current_user = User.find(jwt_payload['sub'])
     end
-    created_jwt = encode({user_id: @user.id})
-    render json: {authenticated: true, user: UserSerializer.new(@user), token: created_jwt}
-  end
-
-  # DELETE /resource/sign_out
-  def destroy # Assumes only JSON requests
-      # cookies.delete(:jwt)
-  end
-  # def destroy
-  #   super
-  # end
-
-  protected
-  def after_sign_in_path_for(resource)
-    session["http://localhost:3001"] = current_user
-  end
-  # If you have extra params to permit, append them to the sanitizer.
-  def configure_sign_in_params
-  devise_parameter_sanitizer.permit(:sign_in) do |user_params|
-    user_params.permit(:username, :email)
-  end
+    
+    if current_user
+      render json: {
+        status: 200,
+        message: 'Logged out successfully.'
+      }, status: :ok
+    else
+      render json: {
+        status: 401,
+        message: "Couldn't find an active session."
+      }, status: :unauthorized
+    end
   end
 end

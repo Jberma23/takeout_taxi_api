@@ -1,30 +1,32 @@
 class FavoritesController < ApplicationController
-  before_action :authenticate
+  # before_action :authenticate
   def index
-    jwt = request.headers[:token]
-      if jwt 
-      id = decode(jwt)
-      current_user = User.find_by(id: id['user_id']) 
-      end
-      if current_user != nil && current_user.role == "customer" 
-      favorites = current_user.favorites
-      render json: favorites
-      else
-      favorites = Favorite.all
-      render json: favorites
-      end
+    @favorite = Favorite.all
+    render json: @favorite
+    # jwt = request.headers[:token]
+    #   if jwt 
+    #   id = decode(jwt)
+    #   current_user = User.find_by(id: id['user_id']) 
+    #   end
+    #   if current_user != nil && current_user.role == "customer" 
+    #   favorites = current_user.favorites
+    #   render json: favorites
+    #   else
+    #   favorites = Favorite.all
+    #   render json: favorites
+    #   end
   end
   def show
-    favorite = Favorite.find_by(params[:id])
-    render json: favorite
+    @favorite = Favorite.find_by(params[:id])
+    render json: @favorite
   end
   def new
-    favorite = Favorite.find_by(params[:id])
+    @favorite = Favorite.find_by(params[:id])
   end
 
   def create
-    favorite = Favorite.create(favorite_params)
-    render json: favorite
+    @favorite = Favorite.create(favorite_params)
+    render json: @favorite
   end
   
   def update
@@ -32,8 +34,7 @@ class FavoritesController < ApplicationController
     @favorite.save
   end
   def destroy
-    
-    favorite = Favorite.find_by(id: params[:id]).delete
+    @favorite = Favorite.find_by(id: params[:id]).delete
     render json: favorite
   end
 
